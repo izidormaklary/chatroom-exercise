@@ -1,16 +1,23 @@
 body {
     height: 100vh;
     background-repeat: no-repeat;
-    background-position: 75vw 75vh, 0 0;
+    background-position: 60vw 60vh, 0 0;
     overflow: hidden;
-    background-size: 20%,contain;
+    background-size: 30vh,contain;
     background-image:
             url('./resources/msn.png'),
             linear-gradient(to bottom, #F3F2F2FF, #C9D9EEFF 40%, #F3F2F2FF);
     color: #0F1F7DFF;
     font-family: Courier;
 }
-
+h1{
+    /*margin:200px;*/
+    font-family: Arial;
+    font-size: 40px;
+    position: relative;
+    left:20%;
+    top: 5%
+}
 .login {
     margin:auto;
     padding: 10px;

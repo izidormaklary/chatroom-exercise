@@ -44,3 +44,10 @@ Now that you guys know how to configure a node server, let's make a chatroom to 
 - [ ] Bring back some features from MSN! (lol)
 - [x] Make a login / registration (a bit more difficult)
     - again, security is not a must
+  
+
+### current state
+
+login page:
+
+![Login page](./resources/screenshot.png)
