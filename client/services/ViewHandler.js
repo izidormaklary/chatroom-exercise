@@ -1,5 +1,5 @@
-import {Login} from "./Login";
-import {Chat} from "./Chat";
+import Login from "../views/Login.js";
+import Chat from "../views/Chat.js";
 export default class ViewHandler {
 
     constructor() {

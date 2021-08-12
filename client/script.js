@@ -1,5 +1,5 @@
-import Renderer from "./Renderer.js";
-import ViewHandler from "./ViewHandler.js";
+import Renderer from "./services/Renderer.js";
+import ViewHandler from "./services/ViewHandler.js";
 
 const socket = io.connect();
 

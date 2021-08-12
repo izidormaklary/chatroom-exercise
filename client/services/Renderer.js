@@ -5,7 +5,7 @@ export default class Renderer{
     }
 
     async render(){
-        return fetch('./'+this._filename)
+        return fetch('./views/'+this._filename)
             .then((fetchedView)=>{
                 return fetchedView.text();
             })
