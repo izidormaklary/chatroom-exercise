@@ -1,3 +1,5 @@
+import User from "../UserClass.js";
+
 export default class Login{
 
     constructor(socket)
@@ -7,5 +9,20 @@ export default class Login{
     }
     get view(){
         return this._view
+    }
+    fetchUser(){
+        const nameInput = document.getElementById('userName');
+        const pwInput = document.getElementById('password');
+        let username = nameInput.value
+        let password = pwInput.value
+        // hashing should happen here
+        return new User(username, password)
+    }
+    listen(){
+        const login = document.getElementById('login')
+        login.addEventListener('click', () => {
+            let newUser = this.fetchUser()
+            this._socket.emit('authenticateMe', newUser)
+        });
     }
 }

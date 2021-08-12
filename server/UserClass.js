@@ -1,4 +1,4 @@
-export default class User{
+class User{
     _password;
     _username;
     // profilePic;
@@ -15,3 +15,5 @@ export default class User{
         return this._password;
     }
 }
+
+module.exports = User;

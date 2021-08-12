@@ -4,13 +4,14 @@ export default class Renderer{
         this._location = location
     }
 
-    async render(){
+    async render(className){
         return fetch('./views/'+this._filename)
             .then((fetchedView)=>{
                 return fetchedView.text();
             })
             .then((pureHtml)=>{
                 let element = document.createElement('div');
+                    element.className = className;
                     element.innerHTML = pureHtml;
                 return element;
             })

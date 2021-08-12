@@ -1,3 +1,4 @@
+const User = require('./UserClass.js')
 const express = require('express');
 const http = require('http');
 
@@ -19,8 +20,6 @@ io.on('connection', (socket) => {
     counter++;
     console.log(counter + ' someone connected');
     socket.on('sendToAll', function (data) {
-        console.log(data)
-
         socket.broadcast.emit("displayMessage", {message: data.message, sender: data.sender});
         sender = "you"
         socket.emit("displayMessage", {message: data.message, sender: "you"})
@@ -38,7 +37,7 @@ io.on('connection', (socket) => {
         });
         if (check.length === 0) {
             users.push(user);
-            socket.emit('authenticate', {success:true, user:user})
+            socket.emit('authenticate', {success: true, user: user})
         } else {
             socket.emit('error', "username already exists");
         }
@@ -46,15 +45,17 @@ io.on('connection', (socket) => {
     })
 
     socket.on('authenticateMe', (user) => {
+        console.log("in login ---------------------------")
+
+
         check = users.filter((el) => {
             if (el._username === user._username &&
                 el._password === user._password) {
                 return el;
             }
         })
-
         if (check.length === 1) {
-            socket.emit('authenticate', {success:true, user:user});
+            socket.emit('authenticate', {success: true, user: user});
             console.log(user._username + " joined")
         } else {
             socket.emit('error', "wrong username or password");
