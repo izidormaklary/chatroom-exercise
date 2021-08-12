@@ -1,29 +1,44 @@
 import Renderer from "./services/Renderer.js";
 import ViewHandler from "./services/ViewHandler.js";
+import User from "./UserClass.js";
 
 const socket = io.connect();
 
 const render_to = document.getElementById("root")
 
-const views = new ViewHandler();
+const views = new ViewHandler(socket);
 
 const renderLogin = new Renderer(views.login.view, render_to)
+const renderReg = new Renderer(views.register.view, render_to)
 const renderChat = new Renderer(views.chat.view, render_to)
 
 let user;
 renderLogin.render().then(() => {
-    let nameInput = document.getElementById('userName');
-    let pwInput = document.getElementById('password');
+    const nameInput = document.getElementById('userName');
+    const pwInput = document.getElementById('password');
+    const toRegistration = document.getElementById('toregister');
+
+    function fetchUser() {
+        let username = nameInput.value
+        let password = pwInput.value // hashing should happen here
+        return new User(username, password)
+    }
+
+    toRegistration.addEventListener('click', () => {
+        renderReg.render()
+            .then(() => {
+                const register = document.getElementById('register')
+                register.addEventListener('click', () => {
+                    socket.emit('register', fetchUser())
+                });
+            });
+    });
+
     document.getElementById('login')
         .addEventListener('click', () => {
-            let username = nameInput.value
-            let password = pwInput.value
-            user = {'username':username,'password':password}
-            socket.emit('authenticateMe', user)
-        })
-})
-
-
+            socket.emit('authenticateMe', fetchUser())
+        });
+});
 
 
 socket.on('authenticate', (success) => {
@@ -33,20 +48,16 @@ socket.on('authenticate', (success) => {
             const toMe = document.getElementById("sendToMe");
             const message = document.getElementById("message");
             const toAll = document.getElementById("sendToAll");
-            toAll.addEventListener("click", () => {
-                let txtMessage = message.value;
-                let username = user.username
-                socket.emit('sendToAll', {message:txtMessage, sender:username});
-            });
 
-            toMe.addEventListener("click", () => {
-                let txtMessage = message.value;
-                socket.emit('sendToMe', (txtMessage));
-            });
-            socket.on('displayMessage', function(data){
-                target.innerText +=data.sender +":"+ data.message;
-                target.innerHTML += '<br>'
-            });
+            toAll.addEventListener("click", e => views.chat.toALl(user));
+            toMe.addEventListener("click", e => views.chat.toMe());
+
+            socket.on('displayMessage', data => views.chat.renderMessage(data));
         })
     }
 })
+
+socket.on('error',(message)=> {
+    alert(message)
+})
+
