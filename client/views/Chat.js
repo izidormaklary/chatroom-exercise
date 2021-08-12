@@ -1,5 +1,5 @@
 export default class Chat {
-
+    #_user;
     constructor(socket) {
         this._socket= socket;
         this._view = 'chat.html'
@@ -18,9 +18,27 @@ export default class Chat {
         let txtMessage = message.value;
         this._socket.emit('sendToMe', (txtMessage));
     };
-    toALl(user){
+    toALl(){
             let txtMessage = message.value;
-            let username = user.username;
+            let username = this.#_user._username;
             this._socket.emit('sendToAll', {message: txtMessage, sender: username});
     };
+
+    set user(user){
+        this.#_user = user;
+    }
+
+    controller(){
+        const target = document.getElementById("target");
+        const toMe = document.getElementById("sendToMe");
+        const message = document.getElementById("message");
+        const toAll = document.getElementById("sendToAll");
+
+        toAll.addEventListener("click", e => this.toALl());
+
+        toMe.addEventListener("click", e => this.toMe());
+
+        this._socket.on('displayMessage', data => this.renderMessage(data));
+    }
 }
+

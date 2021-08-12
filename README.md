@@ -19,7 +19,7 @@ Now that you guys know how to configure a node server, let's make a chatroom to 
 ### Must-have features
 
 - [ ] Make a UI that makes it easy for people to send messages in this chatroom.
-- [ ] It must be possible to send a message to everyone or to yourself
+- [x] It must be possible to send a message to everyone or to yourself
 - [x] Make sure we can identify who sent the message through a username.
     - We could make a local variable and prompt the user to choose a username
     - We can then emit this username along with the sent message to keep track of who sent what.
@@ -31,7 +31,7 @@ Now that you guys know how to configure a node server, let's make a chatroom to 
     
 ### Nice-to-have features
 
-- [ ] Instead of just asking for a username, we can make a user class with properties such as
+- [x] Instead of just asking for a username, we can make a user class with properties such as
     - username
     - password (if you make a login system)
     - avatar
@@ -42,5 +42,5 @@ Now that you guys know how to configure a node server, let's make a chatroom to 
 - [ ] Make it possible to send private messages to a person
 - [ ] Add images, emojis, videos, gifs to your messages
 - [ ] Bring back some features from MSN! (lol)
-- [ ] Make a login / registration (a bit more difficult)
+- [x] Make a login / registration (a bit more difficult)
     - again, security is not a must

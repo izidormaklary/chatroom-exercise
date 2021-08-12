@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
         });
         if (check.length === 0) {
             users.push(user);
-            socket.emit('authenticate', true);
+            socket.emit('authenticate', {success:true, user:user})
         } else {
             socket.emit('error', "username already exists");
         }
@@ -52,10 +52,9 @@ io.on('connection', (socket) => {
                 return el;
             }
         })
-        console.log(user)
 
         if (check.length === 1) {
-            socket.emit('authenticate', true);
+            socket.emit('authenticate', {success:true, user:user});
             console.log(user._username + " joined")
         } else {
             socket.emit('error', "wrong username or password");

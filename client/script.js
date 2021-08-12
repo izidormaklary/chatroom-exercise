@@ -24,40 +24,41 @@ renderLogin.render().then(() => {
         return new User(username, password)
     }
 
+    // listens to the button leading to registration rather then login
     toRegistration.addEventListener('click', () => {
         renderReg.render()
             .then(() => {
+                // after rendering properly sets the relevant listener to submit the registration
                 const register = document.getElementById('register')
                 register.addEventListener('click', () => {
+                    // emits the filled user data checks for username validity (no-repeat)
                     socket.emit('register', fetchUser())
                 });
             });
     });
 
-    document.getElementById('login')
-        .addEventListener('click', () => {
+    // listens to login submit, then asks for authentication,
+    // either success(renders chat view) or alerting error
+    const login = document.getElementById('login')
+        login.addEventListener('click', () => {
             socket.emit('authenticateMe', fetchUser())
         });
 });
 
-
-socket.on('authenticate', (success) => {
-    if (success) {
+// case where user is authenticated (either through registration or login)
+socket.on('authenticate', function(data){
+    if (data.success) {
         renderChat.render().then(() => {
-            const target = document.getElementById("target");
-            const toMe = document.getElementById("sendToMe");
-            const message = document.getElementById("message");
-            const toAll = document.getElementById("sendToAll");
-
-            toAll.addEventListener("click", e => views.chat.toALl(user));
-            toMe.addEventListener("click", e => views.chat.toMe());
-
-            socket.on('displayMessage', data => views.chat.renderMessage(data));
+            // needs user for certain methods
+            views.chat.user = data.user;
+            // triggers the brain of the chat class,
+            // sets all the event/socket-listeners/emitters
+            views.chat.controller();
         })
     }
 })
 
+//general socket listener for error
 socket.on('error',(message)=> {
     alert(message)
 })
-
