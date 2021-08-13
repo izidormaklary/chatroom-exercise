@@ -60,3 +60,7 @@ login page:
 
 
 ![chat in progress](./resources/chat_in_progress.png)
+
+messages collapse if coming from the same user
+
+![chat progress](./resources/chat_progressed.png)

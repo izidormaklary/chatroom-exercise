@@ -1,15 +1,17 @@
 $lightblue: #c9d9eeff
+$imgBg: #dce6f3
 $white: #f3f2f2ff
 $gradient: linear-gradient(to bottom, $lightblue, $white 40%, $lightblue)
+$radial-background: radial-gradient(closest-corner, $white, $white 40%, $lightblue 50%, transparent 50%)
 $lightborder: #44516d
-$small:14px
+$small: 14px
 body
   height: 100vh
   background-repeat: no-repeat
-  background-position: 0 0, 60vw 60vh
+  background-position: 48vw 10vh, -21vw 55vh, 0 0
   overflow: hidden
-  background-size: contain, 30vh
-  background-image: $gradient, url("resources/logo.png")
+  background-size: 180vw 180vh, 180vw 180vh, contain
+  background-image: $radial-background, $radial-background, $gradient
 
   color: #0F1F7DFF
   font-family: Courier, serif
@@ -43,17 +45,30 @@ h1
     border: solid 2px
 
 .chat
+  height: 90vh
   display: flex
   flex-direction: row
   justify-content: center
-
+  padding-top: 100px
 
 .messenger, .finder
   width: 60vw
-  height: 90vh
+  height: 100%
   display: flex
   flex-direction: column
 
+#header
+  $lightblue: #94b5dd
+  border-radius: 10px
+  background-repeat: no-repeat
+  background-size: 75px, contain
+  background-position: 90% 5px, 0 0
+  background-image: url("/resources/logo.png"), linear-gradient(to bottom, $white, $white 20%, $lightblue 48%, $lightblue 52%, $white 80%, $white)
+  position: fixed
+  top: 0
+  width: 100%
+  height: 100px
+  box-shadow: inset 0px -1px 10px 1px $lightblue
 
 @mixin gradientBar
   margin: -2px -2px 0 -2px
@@ -82,6 +97,7 @@ h1
     background: $white
     font-size: 25px
     resize: none
+
     &:focus-visible
       outline: none
 
@@ -95,6 +111,7 @@ h1
     height: 25%
     border-radius: 10px
     box-shadow: -10px -10px 15px 0 inset #B5D3F7FF
+
     &:first-of-type
       margin-bottom: 0
 
@@ -116,24 +133,92 @@ h1
   flex-direction: column-reverse
   align-content: end
 
-#location
+  .messageBody
+    flex-direction: column
+    padding: 5px
+    &:hover
+      background: #dfecfb
+    .sender, .message
+      display: block
+    .sender
+      font-size: $small
+      &::after
+        content: " sent:"
+    .message
+      margin: 2px
+
+
+
+
+
+
+
+.location
   @include gradientBar
+  background: $lightblue
   margin: 0 0 -2px 0
   box-sizing: border-box
   border-radius: 20px 20px 0 0
   height: 50px
 
-.messageBody
-  flex-direction: column
-  padding: 15px
-  &:hover
-    background: #dfecfb
+  p
+    vertical-align: center
+    margin-left: 20px
 
-.sender
-  font-size: $small
-  position: relative
-  top: -40px
-  left: 5px
+@mixin roundedborder
+  border: solid 2px $lightborder
+  border-radius: 10px
 
 .finder
   width: 30vh
+  height: 100%
+  align-content: center
+
+  #sidebar
+    display: flex
+    flex-direction: column
+    padding: 7%
+    $height: calc(55% + 50px)
+    height: $height
+
+    .nav
+      @include gradientBar
+      box-sizing: border-box
+      margin: 0
+      border-radius: 20px 20px 0 0
+      height: 50px
+      overflow-x: scroll
+      overscroll-behavior-y: auto
+      overflow-y: hidden
+      display: flex
+      flex-direction: row
+
+      div
+        border-radius: 5px
+        text-align: center
+        height: calc(100% - 15px)
+        padding: 15px
+
+        &:hover
+          background: $white
+
+    #sidebarContent
+      box-sizing: border-box
+      background: $white
+      margin-top: -2px
+      border: solid 2px $lightborder
+      height: calc(100% - 50px)
+
+  .pictureContainer
+    @include roundedborder
+    margin-top: 20px
+    background: $imgBg
+    height: 270px
+    width: 250px
+    margin-left: 10%
+
+    img
+      @include roundedborder
+      width: 80%
+      margin-top: 5%
+      margin-left: 10%

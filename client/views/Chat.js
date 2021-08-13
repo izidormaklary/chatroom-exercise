@@ -1,5 +1,6 @@
 export default class Chat {
     #_user;
+    #_lastUser = "";
     constructor(socket) {
         this._socket= socket;
         this._view = 'chat.html'
@@ -10,24 +11,43 @@ export default class Chat {
     };
 
     renderMessage(data) {
-        let messageBody = document.createElement('div');
-        messageBody.className = 'messageBody';
-        let sender = document.createElement('div');
-        sender.className = 'sender';
-        sender.innerText = data.sender+":"
-        target.prepend(messageBody);
-        messageBody.innerText = data.message;
-        messageBody.appendChild(sender);
 
 
+        let message = document.createElement('p');
+
+        message.innerText = data.message;
+        message.className = 'message'
+        console.log(this.lastuser)
+        console.log(data.user)
+        if (this.lastuser != data.sender ){
+            let sender = document.createElement('p');
+            sender.innerText = data.sender
+            sender.className = 'sender';
+
+            let messageBody = document.createElement('div');
+            messageBody.className = 'messageBody';
+            messageBody.appendChild(sender);
+            target.prepend(messageBody);
+            messageBody.appendChild(message);
+        }else{
+            target.firstChild.appendChild(message)
+        }
+
+        this.lastuser= data.sender
     };
-
+    set lastuser(user){
+        this.#_lastUser = user;
+    };
+    get lastuser(){
+        return this.#_lastUser;
+    }
     toMe(){
         let txtMessage = message.value;
         this._socket.emit('sendToMe', (txtMessage));
     };
     toALl(){
             let txtMessage = message.value;
+            message.value = `` ;
             let username = this.#_user._username;
             this._socket.emit('sendToAll', {message: txtMessage, sender: username});
     };
