@@ -1,6 +1,7 @@
 const User = require('./UserClass.js')
 const express = require('express');
 const http = require('http');
+// const bcrypt = require('bcrypt')
 
 const app = express();
 const clientPath = `${__dirname}/../client/`;
@@ -35,6 +36,7 @@ io.on('connection', (socket) => {
                 return el;
             }
         });
+
         if (check.length === 0) {
             users.push(user);
             socket.emit('authenticate', {success: true, user: user})

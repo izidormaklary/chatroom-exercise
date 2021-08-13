@@ -14,7 +14,8 @@ export default class Login{
         const nameInput = document.getElementById('userName');
         const pwInput = document.getElementById('password');
         let username = nameInput.value
-        let password = pwInput.value
+        let password = pwInput.value;
+        // console.log(bcrypt.hash(password, saltRounds, function(err, hash){}))
         // hashing should happen here
         return new User(username, password)
     }

@@ -18,7 +18,7 @@ Now that you guys know how to configure a node server, let's make a chatroom to 
 
 ### Must-have features
 
-- [ ] Make a UI that makes it easy for people to send messages in this chatroom.
+- [x] Make a UI that makes it easy for people to send messages in this chatroom.
 - [x] It must be possible to send a message to everyone or to yourself
 - [x] Make sure we can identify who sent the message through a username.
     - We could make a local variable and prompt the user to choose a username
@@ -45,9 +45,18 @@ Now that you guys know how to configure a node server, let's make a chatroom to 
 - [x] Make a login / registration (a bit more difficult)
     - again, security is not a must
   
+# todo
+
+  * list of everyone online
+  * chatrooms
+  * fix senders name  
+
 
 ### current state
 
 login page:
 
 ![Login page](./resources/screenshot.png)
+
+
+![chat in progress](./resources/chat_in_progress.png)

@@ -1,6 +1,7 @@
 import Renderer from "./services/Renderer.js";
 import ViewHandler from "./services/ViewHandler.js";
 
+
 const socket = io.connect();
 
 const render_to = document.getElementById("root")
@@ -32,6 +33,7 @@ socket.on('authenticate', function (data) {
         renderChat.render('chat').then(() => {
             // needs user for certain methods
             views.chat.user = data.user;
+            console.log(data.user)
             // triggers the brain of the chat class,
             // sets all the event/socket-listeners/emitters
             views.chat.controller();

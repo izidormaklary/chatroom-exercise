@@ -12,9 +12,14 @@ export default class Chat {
     renderMessage(data) {
         let messageBody = document.createElement('div');
         messageBody.className = 'messageBody';
-        messageBody.innerText += data.sender + ":" + data.message;
-        target.appendChild(messageBody);
-        // target.innerHTML += '<br>';
+        let sender = document.createElement('div');
+        sender.className = 'sender';
+        sender.innerText = data.sender+":"
+        target.prepend(messageBody);
+        messageBody.innerText = data.message;
+        messageBody.appendChild(sender);
+
+
     };
 
     toMe(){

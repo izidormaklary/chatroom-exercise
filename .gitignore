@@ -1,2 +1,5 @@
 server/node_modules
 .idea
+client/safety.css
+server/.DS_Store
+.DS_Store
