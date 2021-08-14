@@ -20,6 +20,7 @@ export default class Login{
         return new User(username, password)
     }
     listen(){
+
         const login = document.getElementById('login')
         login.addEventListener('click', () => {
             let newUser = this.fetchUser()

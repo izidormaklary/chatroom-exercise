@@ -39,7 +39,7 @@ h1 {
 }
 
 .chat {
-  height: 90vh;
+  height: 85vh;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -72,7 +72,7 @@ h1 {
   width: 100%;
   align-self: end;
   height: 250px;
-  background: #f3f2f2ff;
+  background: rgba(243, 242, 242, 0.5);
   padding: 0;
   border: solid 2px #44516d;
   overflow: hidden;
@@ -83,7 +83,7 @@ h1 {
   width: 80%;
   float: left;
   border: none;
-  background: #f3f2f2ff;
+  background: transparent;
   font-size: 25px;
   resize: none;
 }
@@ -122,9 +122,9 @@ h1 {
 #target {
   border: solid 2px #44516d;
   margin-bottom: 20px;
-  background: #f3f2f2ff;
+  background: rgba(243, 242, 242, 0.5);
   overflow: scroll;
-  height: 60%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column-reverse;
   align-content: end;
@@ -167,15 +167,14 @@ h1 {
 }
 
 .finder {
-  width: 30vh;
-  height: 100%;
+  width: 30vw;
   align-content: center;
 }
 .finder #sidebar {
   display: flex;
   flex-direction: column;
   padding: 7%;
-  height: calc(55% + 50px);
+  flex-grow: 1;
 }
 .finder #sidebar .nav {
   margin: -2px -2px 0 -2px;
@@ -197,26 +196,39 @@ h1 {
   border-radius: 5px;
   text-align: center;
   height: calc(100% - 15px);
-  padding: 15px;
+  padding: 5px;
+  padding-top: 15px;
+  white-space: nowrap;
 }
 .finder #sidebar .nav div:hover {
   background: #f3f2f2ff;
 }
 .finder #sidebar #sidebarContent {
   box-sizing: border-box;
-  background: #f3f2f2ff;
+  background: rgba(243, 242, 242, 0.5);
   margin-top: -2px;
   border: solid 2px #44516d;
   height: calc(100% - 50px);
 }
+.finder #sidebar #sidebarContent #userList li {
+  list-style-position: inside;
+  transition: 0.3s;
+}
+.finder #sidebar #sidebarContent #userList li:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 6px 0 6px 6px;
+}
+.finder #sidebar #sidebarContent #userList .activeUserList {
+  list-style-image: radial-gradient(closest-side, #2cff2c 10%, #00b900 100%, transparent);
+}
 .finder .pictureContainer {
   border: solid 2px #44516d;
   border-radius: 10px;
-  margin-top: 20px;
   background: #dce6f3;
   height: 270px;
   width: 250px;
-  margin-left: 10%;
+  margin: auto;
 }
 .finder .pictureContainer img {
   border: solid 2px #44516d;

@@ -20,11 +20,13 @@ let counter = 0;
 io.on('connection', (socket) => {
     counter++;
     console.log(counter + ' someone connected');
+
     socket.on('sendToAll', function (data) {
         socket.broadcast.emit("displayMessage", {message: data.message, sender: data.sender});
         sender = "you"
         socket.emit("displayMessage", {message: data.message, sender: "you"})
     });
+
 
     socket.on('sendToMe', (message) => {
         socket.emit("displayMessage", {message: message, sender: "you"});
@@ -36,32 +38,76 @@ io.on('connection', (socket) => {
                 return el;
             }
         });
-
         if (check.length === 0) {
+            user._active = true;
+            user._socketId = socket.id
             users.push(user);
-            socket.emit('authenticate', {success: true, user: user})
+            let actives = getActiveUsersButMe(user._username)
+            socket.emit('authenticate', {success: true, user: user._username, active: actives});
+            socket.broadcast.emit('updateActiveUsers', user._username)
         } else {
             socket.emit('error', "username already exists");
         }
-
-    })
+    });
 
     socket.on('authenticateMe', (user) => {
-        console.log("in login ---------------------------")
 
 
-        check = users.filter((el) => {
+        check = users.filter((el, i) => {
             if (el._username === user._username &&
                 el._password === user._password) {
+                el._active = true;
+                el._socketId = socket.id;
                 return el;
             }
-        })
+        });
         if (check.length === 1) {
-            socket.emit('authenticate', {success: true, user: user});
-            console.log(user._username + " joined")
+            let actives = getActiveUsersButMe(user._username)
+            socket.emit('authenticate', {success: true, user: user._username, active: actives});
+            socket.broadcast.emit('updateActiveUsers', user._username)
         } else {
             socket.emit('error', "wrong username or password");
         }
-    })
-})
+    });
+    socket.on('disconnect', socket => {
+        function timeout(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
 
+        setTimeout(async function deactivate() {
+            await timeout(20000)
+                .then(() => {
+                    users.filter((el) => {
+                        if (el._socketId === socket.id) {
+                            console.log(el._socketId);
+                            console.log(socket.id)
+                            el._active = false
+                        }
+                    });
+                });
+        }, 20000);
+    })
+
+    socket.on('refreshed', username => {
+        let check2 = users.filter((el) => {
+            if (el._username === username && el._active) {
+                el._socketId = socket.id;
+                return el;
+            }
+        });
+        if (check2.length === 1) {
+            let actives = getActiveUsersButMe(username);
+            socket.emit('authenticate', {success: true, user: username, active: actives});
+        }
+    });
+});
+
+function getActiveUsersButMe(username) {
+    let otherActives = users.filter((el) => el._active && el._username !== username)
+    let activeUserNames = [];
+    otherActives.forEach(el => {
+        activeUserNames.push(el._username);
+    });
+
+    return activeUserNames;
+}

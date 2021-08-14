@@ -12,7 +12,17 @@ const renderLogin = new Renderer(views.login.view, render_to)
 const renderReg = new Renderer(views.register.view, render_to)
 const renderChat = new Renderer(views.chat.view, render_to)
 
-renderLogin.render('login').then(() => {
+
+
+
+
+if (sessionStorage.getItem('user')){
+    let returner = sessionStorage.getItem('user');
+    console.log(returner)
+    socket.emit('refreshed', returner);
+
+}
+    renderLogin.render('login').then(() => {
     const toRegistration = document.getElementById('toregister');
     // listens to the button leading to registration rather then login
     toRegistration.addEventListener('click', () => {
@@ -27,16 +37,19 @@ renderLogin.render('login').then(() => {
     views.login.listen()
 });
 
+
 // case where user is authenticated (either through registration or login)
 socket.on('authenticate', function (data) {
     if (data.success) {
+
+        sessionStorage.setItem('user', data.user);
         renderChat.render('chat').then(() => {
             // needs user for certain methods
             views.chat.user = data.user;
-            console.log(data.user)
+
             // triggers the brain of the chat class,
             // sets all the event/socket-listeners/emitters
-            views.chat.controller();
+            views.chat.controller(data.active);
         })
     }
 })
