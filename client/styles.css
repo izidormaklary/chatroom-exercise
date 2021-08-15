@@ -250,7 +250,12 @@ h1 {
   transition: 1s linear;
   color: blue;
   padding: 10px;
+}
+#notification #notificationMessage {
   cursor: pointer;
+}
+#notification #notificationMessage:hover {
+  text-decoration: underline;
 }
 #notification #closeNotification {
   position: relative;

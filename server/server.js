@@ -51,8 +51,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on('authenticateMe', (user) => {
-
-
         check = users.filter((el, i) => {
             if (el._username === user._username &&
                 el._password === user._password) {
@@ -87,13 +85,23 @@ io.on('connection', (socket) => {
                 });
         }, 20000);
     })
-    socket.on('startPrivateWith', (username)=>{
-        let userTo = users.filter((el)=>el._username === username);
-        console.log(userTo)
-        socket.to(userTo[0]._socketId).emit("notificationToPrivate", user)
-
+    socket.on('startPrivateWith', function (data){
+        let userTo = getUserByName(data.newName);
+        socket.to(userTo._socketId).emit("notificationToPrivate", data.from)
+    })
+    socket.on('privateReject',(data)=>{
+        let userTo = getUserByName(data.userTo)
+        socket.to(userTo._socketId).emit("rejectedPrivate", data.from)
     })
 
+    socket.on('privateMessage', (data)=>{
+        console.log(data.userTo)
+        console.log("-----------")
+        console.log(data.from)
+        let userTo = getUserByName(data.userTo)
+        socket.emit("displayPrivate", {message: data.message, sender: "you"})
+        socket.to(userTo._socketId).emit("displayPrivate", {message: data.message, sender: data.from})
+    })
     socket.on('refreshed', username => {
         let check2 = users.filter((el) => {
             if (el._username === username && el._active) {
@@ -107,7 +115,10 @@ io.on('connection', (socket) => {
         }
     });
 });
-
+function getUserByName(username){
+    const tempArr = users.filter((el)=>el._username === username);
+    return tempArr[0];
+}
 function getActiveUsersButMe(username) {
     let otherActives = users.filter((el) => el._active && el._username !== username)
     let activeUserNames = [];

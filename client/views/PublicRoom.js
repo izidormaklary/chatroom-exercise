@@ -1,11 +1,18 @@
 export default class PublicRoom {
-    #_lastuser='';
+    #_lastuser = '';
+
     constructor(socket, user) {
         this._user = user
         this._socket = socket;
         this._target = document.getElementById("target");
         this._messages = [];
         this._messageInput = document.getElementById("message");
+    }
+    systemMessage(message){
+        let sysmessage = document.createElement("div");
+        sysmessage.className = "systemMessage";
+        sysmessage.innerText = message;
+        this._target.prepend(sysmessage);
     }
 
     renderMessage(data) {
@@ -47,6 +54,5 @@ export default class PublicRoom {
         let username = this._user;
         this._socket.emit('sendToAll', {message: txtMessage, sender: username});
     };
-
-
 }
+
