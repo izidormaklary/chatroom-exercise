@@ -6,11 +6,6 @@ export default class PublicRoom {
         this._target = document.getElementById("target");
         this._messages = [];
         this._messageInput = document.getElementById("message");
-        // this._toAll = document.getElementById("sendToAll");
-    }
-
-    controller(){
-        this._socket.on('displayMessage', data => this.renderMessage(data));
     }
 
     renderMessage(data) {
@@ -25,6 +20,7 @@ export default class PublicRoom {
 
             let messageBody = document.createElement('div');
             messageBody.className = 'messageBody';
+
             messageBody.appendChild(sender);
             this._target.prepend(messageBody);
             messageBody.appendChild(message);
@@ -51,10 +47,6 @@ export default class PublicRoom {
         let username = this._user;
         this._socket.emit('sendToAll', {message: txtMessage, sender: username});
     };
-    // toPrivate() {
-    //     let txtMessage = this._messageInput.value;
-    //     let username = this.private
-    //     this._socket.emit('privateMessage', {message: txtMessage, to: username});
-    // }
+
 
 }

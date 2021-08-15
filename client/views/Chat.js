@@ -1,4 +1,5 @@
-import PublicRoom from "./ChatRooms.js";
+import PublicRoom from "./PublicRoom.js";
+import PrivateRoom from "./PrivateRoom.js";
 
 export default class Chat {
     #_user;
@@ -6,11 +7,13 @@ export default class Chat {
     _tab;
     _userlist;
     _private = "";
-    _chatroom;
+    _publicRoom;
+    _privateRoom;
     constructor(socket) {
         this._socket= socket;
         this._view = 'chat.html';
         this._tab = 'userList';
+        this._currentChat = "public"
 
     };
 
@@ -24,24 +27,35 @@ export default class Chat {
         const tabUsers = document.getElementById("tabUsers");
         const tabRooms = document.getElementById("tabRooms");
         const tabFriends = document.getElementById("tabFriends");
-        this._chatroom = new PublicRoom(this._socket, this.#_user)
-        toAll.addEventListener("click", e => this._chatroom.sendMessage());
+        this._publicRoom = new PublicRoom(this._socket, this.#_user);
 
-        // toAll.addEventListener("click", e => this.private ? this.toPrivate(this.private) :this.toALl());
-        // if(this.private){
-        //     this.toPrivate(this.private)
-        // }else{
-        //     this.toALl()
-        // }
-        this._socket.on('displayMessage', data => this._chatroom.renderMessage(data));
+        console.log(this.p);
+        toAll.addEventListener("click", e =>{
+            if(this._currentChat === "public"){
+                this._publicRoom.sendMessage();
+            }else if(this._currentChat === "private"){
+                this._privateRoom.sendMessage()
+            }
+        });
+        this._socket.on('displayMessage', data => this._publicRoom.renderMessage(data));
 
-        toMe.addEventListener("click", e => this._chatroom.toMe());
+        toMe.addEventListener("click", e => this._publicRoom.toMe());
         activeUserArray[0] ? this.makeUserList(activeUserArray):"";
 
         this._socket.on('updateActiveUsers', (user)=>{
             if(this._tab === 'userList'){
                 this.appendUserToList(user);
             }
+        });
+        this._socket.on("notificationToPrivate", user=>{
+            const notification = document.getElementById('notification')
+            notification.style.bottom = '20px'
+
+            notification.addEventListener('click', ev=>{
+                this.changeRoom(user);
+                this._privateRoom = new PrivateRoom(this._socket, this.#_user, user);
+                notification.style.bottom = '-90px'
+            })
         });
     }
 
@@ -57,12 +71,7 @@ export default class Chat {
             })
         let allUserLi = document.querySelectorAll('.activeUserList');
 
-        allUserLi.forEach((liEl)=>{
-            liEl.addEventListener('click', (ev)=>{
-                this.changeRoom("Private chat with: "+ ev.currentTarget.innerText)
-                this._private = ev.currentTarget.innerText
-            })
-        })
+        allUserLi.forEach(el=>this.userClickListener(el))
     }
 
 
@@ -75,14 +84,20 @@ export default class Chat {
     };
 
     userClickListener(userLi){
-        userLi.addEventListener('click', ()=>{
-
+        userLi.addEventListener('click', (ev)=>{
+            this._privateRoom = new PrivateRoom(this._socket, this.#_user, ev.currentTarget.innerText)
+            this.changeRoom("Private chat with: "+ ev.currentTarget.innerText)
         })
     }
     changeRoom(newName){
+        this._currentChat = this._currentChat === "public" ? "private" : "public";
         const chatroom = document.getElementById('chatRoom');
-        chatroom.innerText= newName;
+        chatroom.innerText = newName;
         target.innerHTML = "";
+        if (this._currentChat === "private") {
+            this._socket.emit('startPrivateWith', newName)
+        }
+
     }
     get view() {
         return this._view;

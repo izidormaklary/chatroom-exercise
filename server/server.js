@@ -87,6 +87,12 @@ io.on('connection', (socket) => {
                 });
         }, 20000);
     })
+    socket.on('startPrivateWith', (username)=>{
+        let userTo = users.filter((el)=>el._username === username);
+        console.log(userTo)
+        socket.to(userTo[0]._socketId).emit("notificationToPrivate", user)
+
+    })
 
     socket.on('refreshed', username => {
         let check2 = users.filter((el) => {

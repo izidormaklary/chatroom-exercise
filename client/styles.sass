@@ -230,3 +230,26 @@ h1
       width: 80%
       margin-top: 5%
       margin-left: 10%
+
+#notification
+  position: fixed
+  bottom: -90px
+  right: 20px
+  height: 60px
+  width: 280px
+  background: rgba(255, 255, 171, 0.86)
+  border-radius: 10px
+  border: black solid 1px
+  transition: 1s linear
+  color: blue
+  padding: 10px
+  cursor: pointer
+  #closeNotification
+    position: relative
+    top: 5px
+    left: 260px
+    height: 15px
+    width: 15px
+    background: radial-gradient( closest-side , #ff5858 30%, #dd1515 100%, transparent)
+    &:hover
+      background: radial-gradient( closest-side , #bb5c5c 10%, #980505 100%, transparent)
